@@ -12,16 +12,41 @@
 
 #include "bsq.h"
 
-int	**ft_find_axis(char **array, int length, int row_num)
+int		**ft_make_num(char **array, char *charset, int length, int row_num)
 {
+	int		**arr_int;
 	int		i;
 	int		j;
-	int		axis[2][2];
-	//start point (x, y) & end point (x, y)
 
+	if (!(arr_int = (int **)malloc(sizeof(int *) * row_num + 1)))
+		return (0);
 	j = -1;
 	while (++j < row_num)
 	{
-		//
+		i = -1;
+		if (!(arr_int[j] = (int *)malloc(sizeof(int) * length)))
+		{
+			arr_int[j] = 0;
+			free_int_array(arr_int);
+			return (0);
+		}
+		while (++i < length)
+		{
+			if (array[j][i] == charset[0])
+				arr_int[j][i] = 1;
+			else if (array[j][i] == charset[1])
+				arr_int[j][i] = 0;
+		}
 	}
+	arr_int[row_num] = 0;
+	return (arr_int);
+}
+
+void	ft_process(char **array, char *charset, int length, int row_num)
+{
+	int		**arr_int;
+
+	arr_int = ft_make_num(array, charset, length, row_num);
+	// Square Finding Algorithm function goes here!
+	free_int_array(arr_int);
 }

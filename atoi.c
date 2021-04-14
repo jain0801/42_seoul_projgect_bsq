@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/12 11:27:17 by jiychoi           #+#    #+#             */
-/*   Updated: 2021/04/12 19:02:02 by jiychoi          ###   ########.fr       */
+/*   Updated: 2021/04/14 01:54:53 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,16 @@ int		ft_atoi(char *str)
 		pseudo_digit[index] = *str++;
 		index++;
 	}
+	if (index < 4)
+		return (0);
 	pseudo_digit[index - 3] = 0;
 	index = 0;
-	while (*pseudo_digit >= '0' && *pseudo_digit <= '9')
+	while (pseudo_digit[index] >= '0' && pseudo_digit[index] <= '9')
 	{
 		digit[index] = pseudo_digit[index];
 		index++;
 	}
-	digit[index] = '\0';
+	digit[index] = 0;
 	return (ft_convert_int(digit));
 }
 
@@ -59,6 +61,11 @@ char	*ft_map_chars(char *str)
 	{
 		pseudo_digit[index] = *str++;
 		index++;
+	}
+	if (index < 4)
+	{
+		free(chars);
+		return (0);
 	}
 	chars[0] = pseudo_digit[index - 3];
 	chars[1] = pseudo_digit[index - 2];

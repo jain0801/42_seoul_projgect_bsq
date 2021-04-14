@@ -31,10 +31,15 @@ int     ft_atoi(char *str);
 char	*ft_map_chars(char *str);
 
 void	ft_putstr(char *str);
+void	free_char_array(char **array);
+void	free_int_array(int **array);
 
 char	**ft_map_not_available();
 char	**ft_map_available();
-void	free_array(char **array);
 void	ft_all_argvs(char **array, char *chset, int argc, char *argv[]);
+
+void	free_int_array(int **array);
+int		**ft_make_num(char **array, char *charset, int length, int row_num);
+void	ft_process(char **array, char *charset, int length, int row_num);
 
 #endif

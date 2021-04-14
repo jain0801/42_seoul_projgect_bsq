@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 21:35:12 by jiychoi           #+#    #+#             */
-/*   Updated: 2021/04/12 19:10:29 by jiychoi          ###   ########.fr       */
+/*   Updated: 2021/04/14 01:42:17 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,19 +50,6 @@ char	**ft_map_available(char *charset, char *filename)
 	return (array);
 }
 
-void	free_array(char **array)
-{
-	int i;
-
-	i = 0;
-	while (array[i])
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
-}
-
 void	ft_all_argvs(char **array, char *chset, int argc, char *argv[])
 {
 	int i;
@@ -76,10 +63,7 @@ void	ft_all_argvs(char **array, char *chset, int argc, char *argv[])
 			ft_putstr("map error\n");
 			continue ;
 		}
-		int j = 0; //erase this!
-		while (array[j]) //erase this!
-			printf("%s\n", array[j++]); //erase this!
-		free_array(array);
+		free_char_array(array);
 		free(chset);
 	}
 }
@@ -94,13 +78,12 @@ int		main(int argc, char *argv[])
 	if (argc == 1)
 	{
 		array = ft_map_not_available(charset);
-		if(!array || !charset)
+		if(!array)
 		{
 			ft_putstr("map error\n");
 			return (0);
 		}
-		//func to find square
-		free_array(array);
+		free_char_array(array);
 		free(charset);
 	}
 	else

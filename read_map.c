@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 19:42:46 by jiychoi           #+#    #+#             */
-/*   Updated: 2021/04/12 18:56:46 by jiychoi          ###   ########.fr       */
+/*   Updated: 2021/04/14 01:45:55 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,11 @@ char	**ft_get_array(char *buf, int length, int row_num)
 	{
 		i = -1;
 		if (!(array[j] = (char *)malloc(sizeof(char) * length + 1)))
+		{
+			array[j] = 0;
+			free_char_array(array);
 			return (0);
+		}
 		while (++i < length)
 			array[j][i] = *buf++;
 		buf++;
@@ -113,5 +117,8 @@ char	**ft_read_map(char *buf, char *filename, char *charset)
 	if (length <= 0 || row_num <= 0 || !charset)
 		return (0);
 	array = ft_get_array(buf, length, row_num);
+	if(!array || !charset)
+		return (0);
+	ft_process(array, charset, length, row_num);
 	return (array);
 }
