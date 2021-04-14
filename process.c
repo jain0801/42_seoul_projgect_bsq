@@ -44,7 +44,7 @@ int		**ft_make_num(char **array, char *charset, int length, int row_num)
 
 int		find_min(int a, int b, int c)
 {
-	int m;
+	int	m;
 
 	m = a;
 	if (m > b)
@@ -54,10 +54,10 @@ int		find_min(int a, int b, int c)
 	return (m);
 }
 
-void	find_bsq(char **array, int length, int row_num)
+void	find_bsq(int **array, int length, int row_num)
 {
-	int row;
-	int col;
+	int	row;
+	int	col;
 
 	row = 0;
 	while (row < row_num)
@@ -67,9 +67,9 @@ void	find_bsq(char **array, int length, int row_num)
 		{
 			if (row > 0 && col > 0)
 			{
-				if (array[row][col] != 0 && arr[row-1][col] != 0 &&
-						arr[row-1][col-1] != 0 && arr[row][col-1] != 0)
-					arr[row][col] = min(arr[row-1][col], arr[row-1][col], arr[row-1][col]) + 1;
+				if (array[row][col] != 0 && array[row-1][col] != 0 &&
+						array[row-1][col-1] != 0 && array[row][col-1] != 0)
+					array[row][col] = find_min(array[row - 1][col], array[row - 1][col - 1], array[row][col - 1]) + 1;
 			}
 			col++;
 		}
@@ -77,11 +77,11 @@ void	find_bsq(char **array, int length, int row_num)
 	}
 }
 
-int		find_maxnum_in_array(char **array, int length, int row_num)
+int		find_maxnum_in_array(int **arr, int length, int row_num)
 {
-	int row;
-	int col;
-	int maxnum;
+	int	row;
+	int	col;
+	int	maxnum;
 
 	maxnum = 0;
 	row = 0;
@@ -91,7 +91,7 @@ int		find_maxnum_in_array(char **array, int length, int row_num)
 		while (col < length)
 		{
 			if (maxnum < arr[row][col])
-				max = arr[row][col];
+				maxnum = arr[row][col];
 			col++;
 		}
 		row++;
@@ -99,15 +99,16 @@ int		find_maxnum_in_array(char **array, int length, int row_num)
 	return (maxnum);
 }
 
-int		check_maxnum_index(char **array, int length, int row_num, int maxnum)
+int		*check_maxnum_index(int **arr, int length, int row_num, int maxnum)
 {
-	int maxrow;
-	int maxnum_index[2];
+	int	*maxnum_index;
+	int	row;
+	int	col;
 
-	maxrow =
-
-	maxnum[0] = -1;
-	rownum[1] = -1;
+	maxnum_index = (int *)malloc(sizeof(int) * 2);
+	maxnum_index[0] = -1;
+	maxnum_index[1] = -1;
+	row = 0;
 	while (row < row_num)
 	{
 		col = 0;
@@ -115,17 +116,17 @@ int		check_maxnum_index(char **array, int length, int row_num, int maxnum)
 		{
 			if (arr[row][col] == maxnum)
 			{
-				if (maxrow == -1)
+				if (maxnum_index[0] == -1)
 				{
-					maxrow = row;
-					maxcol = col;
+					maxnum_index[0] = row;
+					maxnum_index[1] = col;
 				}
 				else
 				{
-					if (maxrow + maxcol > row + col)
+					if (maxnum_index[0] + maxnum_index[1] > row + col)
 					{
-						maxrow = row;
-						maxcol = col;
+						maxnum_index[0] = row;
+						maxnum_index[1] = col;
 					}
 				}
 			}
@@ -133,14 +134,58 @@ int		check_maxnum_index(char **array, int length, int row_num, int maxnum)
 		}
 		row++;
 	}
-	return (
+	return (maxnum_index);
+}
+
+char	**make_big_square(char **array, int *maxnum_index, int maxnum, char *charset)
+{
+	int	row;
+	int 	col;
+
+	row = 0;
+	while (row < maxnum)
+	{
+		col = 0;
+		while (col < maxnum)
+		{
+			array[maxnum_index[0] - row][maxnum_index[1] - col] = charset[2];
+			col++;
+		}
+		row++;
+	}
+	return (array);
+}
+
+void	print_array(char **arr, int length, int row_num)
+{
+	int	row;
+	int	col;
+
+	row = 0;
+	while (row < row_num)
+	{
+		col = 0;
+		while (col < length)
+		{
+			write(1, &arr[row][col], 1);
+			col++;
+		}
+		write(1, "\n", 2);
+		row++;
+	}
 }
 
 void	ft_process(char **array, char *charset, int length, int row_num)
 {
 	int		**arr_int;
+	int		maxnum;
+	int		*maxnum_index;
 
 	arr_int = ft_make_num(array, charset, length, row_num);
-	// Square Finding Algorithm function goes here!
+	find_bsq(arr_int, length, row_num);
+	maxnum = find_maxnum_in_array(arr_int, length, row_num);
+	maxnum_index = check_maxnum_index(arr_int, length, row_num, maxnum);
+	array = make_big_square(array, maxnum_index, maxnum, charset);
+	print_array(array, length, row_num);
 	free_int_array(arr_int);
 }
