@@ -99,6 +99,28 @@ int		find_maxnum_in_array(int **arr, int length, int row_num)
 	return (maxnum);
 }
 
+void		change_maxnum_index(int *maxnum_index, int row, int col)
+{
+	if (maxnum_index[0] == -1)
+	{
+		maxnum_index[0] = row;
+		maxnum_index[1] = col;
+	}
+	else
+	{
+		if (maxnum_index[0] > row)
+		{
+			maxnum_index[0] = row;
+			maxnum_index[1] = col;
+		}
+		else if (maxnum_index[0] == row && maxnum_index[1] > col)
+		{
+			maxnum_index[0] = row;
+			maxnum_index[1] = col;
+		}
+	}
+}
+
 int		*check_maxnum_index(int **arr, int length, int row_num, int maxnum)
 {
 	int	*maxnum_index;
@@ -116,19 +138,7 @@ int		*check_maxnum_index(int **arr, int length, int row_num, int maxnum)
 		{
 			if (arr[row][col] == maxnum)
 			{
-				if (maxnum_index[0] == -1)
-				{
-					maxnum_index[0] = row;
-					maxnum_index[1] = col;
-				}
-				else
-				{
-					if (maxnum_index[0] + maxnum_index[1] > row + col)
-					{
-						maxnum_index[0] = row;
-						maxnum_index[1] = col;
-					}
-				}
+				change_maxnum_index(maxnum_index, row, col);
 			}
 			col++;
 		}
